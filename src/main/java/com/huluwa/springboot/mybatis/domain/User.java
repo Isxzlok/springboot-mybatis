@@ -1,6 +1,7 @@
 package com.huluwa.springboot.mybatis.domain;
 
 import java.util.Date;
+import java.util.List;
 
 public class User {
     private Integer id;
@@ -12,6 +13,16 @@ public class User {
     private String sex;
 
     private String address;
+
+    private List<Orders> orders;
+
+    public List<Orders> getOrders() {
+        return orders;
+    }
+
+    public void setOrders(List<Orders> orders) {
+        this.orders = orders;
+    }
 
     public Integer getId() {
         return id;

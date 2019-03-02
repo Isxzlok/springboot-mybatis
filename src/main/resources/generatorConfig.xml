@@ -12,7 +12,7 @@
             <property name="suppressAllComments" value="true"/>
         </commentGenerator>
 
-        <jdbcConnection connectionURL="jdbc:mysql://127.0.0.1/product"
+        <jdbcConnection connectionURL="jdbc:mysql://127.0.0.1/product1"
                         driverClass="com.mysql.jdbc.Driver" password="adminadmin" userId="root" />
 
 

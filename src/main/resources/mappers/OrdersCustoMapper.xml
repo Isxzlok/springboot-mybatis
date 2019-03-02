@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.huluwa.springboot.mybatis.mapper.OrdersCustomMapper">
+    <resultMap id="OrdersAndUserResultMap" type="com.huluwa.springboot.mybatis.domain.Orders">
+        <!-- 订单信息 -->
+        <id column="id" property="id"/>
+        <result column="user_id" property="userId"/>
+        <result column="number" property="number"/>
+        <result column="createtime" property="createtime"/>
+        <!-- 用户信息
+         association:一对一关联映射
+         property：关联信息查询的结果将要映射的扩展类中的对象属性名称
+         -->
+        <association property="user" javaType="com.huluwa.springboot.mybatis.domain.User">
+            <id column="user_id" property="id"/>
+            <result column="username" property="username"/>
+            <result column="sex" property="sex"/>
+        </association>
+    </resultMap>
+
+    <resultMap id="OrdersAndUserAndOrderDetail" type="com.huluwa.springboot.mybatis.domain.Orders">
+        <id column="ordersid" property="id"/>
+
+        <result column="number" property="number"/>
+        <result column="createtime" property="createtime"/>
+
+        <association property="user" javaType="com.huluwa.springboot.mybatis.domain.User">
+            <id column="userid" property="id"/>
+            <result column="username" property="username"/>
+        </association>
+
+        <collection property="orderdetails" ofType="com.huluwa.springboot.mybatis.domain.Orderdetail">
+            <id column="orderdetailid" property="id"/>
+            <result column="items_id" property="itemsId"/>
+            <result column="items_num" property="itemsNum"/>
+            <result column="orders_id" property="ordersId"/>
+        </collection>
+    </resultMap>
+
+    <!-- 多对多关系之ResulMap-->
+    <resultMap id="UserAndItems" type="com.huluwa.springboot.mybatis.domain.User">
+        <id column="userid" property="id"/>
+        <result column="username" property="username"/>
+
+        <!-- 一个用户可以有多个订单 -->
+        <collection property="orders" ofType="com.huluwa.springboot.mybatis.domain.Orders">
+            <!-- 一个订单可以有多个订单明细 -->
+            <result column="itemsnum" property="number"/>
+            <result column="createtime" property="createtime"/>
+            <collection property="orderdetails" ofType="com.huluwa.springboot.mybatis.domain.Orderdetail">
+                <!-- 一个订单明细只能有一个商品信息 -->
+                <association property="items" javaType="com.huluwa.springboot.mybatis.domain.Items">
+                    <result column="name" property="name"/>
+                </association>
+
+            </collection>
+
+        </collection>
+
+    </resultMap>
+    <!-- 一对一之ResultType-->
+    <select id="findOrdersAndUser" resultType="com.huluwa.springboot.mybatis.domain.OrdersCustom">
+           select orders.number,orders.createtime,username from user,orders where user.id = orders.user_id;
+    </select>
+    <!-- 一对一之ResultMap -->
+    <select id="findOrdersAndUser1" resultMap="OrdersAndUserResultMap">
+        select orders.number,orders.createtime,user.username from user,orders where user.id = orders.user_id;
+    </select>
+
+
+    <!-- 一对多 -->
+    <select id="findOrdersAndUserAndOrderDetail" resultMap="OrdersAndUserAndOrderDetail">
+        select user.id userid,user.username,
+orders.id ordersid,orders.number,orders.createtime,
+orderdetail.id orderdetailid,orderdetail.items_id,orderdetail.items_num,orderdetail.orders_id
+from user,orders,orderdetail
+where orders.user_id = user.id and orders.id = orderdetail.orders_id
+
+    </select>
+
+
+    <!-- 查询用户购买商品信息 -->
+    <!-- 多对多关系-->
+    <select id="findUserAndItems" resultMap="UserAndItems">
+select user.id userid, user.username,items.name,orderdetail.items_num itemsnum,orders.createtime
+from user,orderdetail,orders,items
+where user.id = orders.user_id and orders.id = orderdetail.orders_id and items.id = orderdetail.items_id
+    </select>
+
+</mapper>
