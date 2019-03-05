@@ -1,10 +1,12 @@
 server:
   port: 8080
 spring:
+#热部署
   devtools:
     restart:
       exclude: static/**,public/**
       enabled: true
+#数据源配置
   datasource:
     name: product
     url: jdbc:mysql://127.0.0.1:3306/product1?useUnicode=true&characterEncoding=utf8
@@ -13,7 +15,26 @@ spring:
     type: com.alibaba.druid.pool.DruidDataSource
     driver-class-name: com.mysql.jdbc.Driver
 
+#redis配置
+  redis:
+    host: localhost
+    port: 6379
+    password: adminadmin
+    timeout: 1000
+#jsp支持
+  mvc:
+    view:
+      prefix: /WEB-INF/views/
+      suffix: .jsp
+
+#关闭模板引擎
+  thymeleaf:
+    cache: false
+    enabled: false
+
+#mybatis配置
 mybatis:
   configuration:
     log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
   mapper-locations: classpath*:mappers/*Mapper.xml
+

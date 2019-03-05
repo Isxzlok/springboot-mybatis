@@ -16,4 +16,7 @@ public interface UserService {
     public void update(User user);
 
     public List<User> select(int id);
+
+    //整合redis添加用户
+    public void addUser(User user);
 }

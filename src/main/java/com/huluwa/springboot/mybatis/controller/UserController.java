@@ -66,4 +66,14 @@ public class UserController {
         return userService.select(32);
     }
 
+
+    @RequestMapping("/addUser")
+    public String addUser(String username, String address){
+        User user = new User();
+        user.setUsername(username);
+        user.setAddress(address);
+        userService.addUser(user);
+        return "success";
+    }
+
 }
